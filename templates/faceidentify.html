@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人脸分析</title>
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+</head>
+<body>
+<div class="layui-fluid">
+
+    <div class="layui-row">
+        <div class="layui-col-xs6">
+          <div class="grid-demo grid-demo-bg1">
+              <!-- 图片上传-->
+                <div class="layui-form-item" >
+                    <label for="Gender" class="layui-form-label">
+                        <span class="x-red">*</span>图片</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-upload-drag" id="test10">
+                          <i class="layui-icon"></i>
+                          <p>点击上传，或将文件拖拽到此处</p>
+                          <div class="layui-hide" id="uploadDemoView">
+                                <hr>
+                                <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                                <input type="hidden" id="imgurl">
+                          </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+        <div class="layui-col-xs6">
+          <div class="grid-demo">
+                <div class="layui-form-item">
+                    <label for="Gender" class="layui-form-label">
+                        <span class="x-red">*</span>性别</label>
+                    <div class="layui-input-inline" style="width: 400px">
+                        <input type="text" id="Gender"  >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="Gender" class="layui-form-label">
+                        <span class="x-red">*</span>年龄</label>
+                    <div class="layui-input-inline" style="width: 400px">
+                        <input type="text" id="Age"  >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="Gender" class="layui-form-label">
+                        <span class="x-red">*</span>笑容</label>
+                    <div class="layui-input-inline" style="width: 400px">
+                        <input type="text" id="smile"  >
+                    </div>
+                </div>
+                 <div class="layui-form-item">
+                        <label for="Gender" class="layui-form-label">
+                            <span class="x-red">*</span>眼镜</label>
+                        <div class="layui-input-inline" style="width: 400px">
+                            <input type="text" id="Glass"  >
+                        </div>
+                 </div>
+                 <div class="layui-form-item">
+                        <label for="Gender" class="layui-form-label">
+                            <span class="x-red">*</span>颜值</label>
+                        <div class="layui-input-inline" style="width: 400px">
+                            <input type="text" id="Beauty"  >
+                        </div>
+                 </div>
+                <div class="layui-form-item">
+                        <label for="Gender" class="layui-form-label">
+                            <span class="x-red">*</span>帽子</label>
+                        <div class="layui-input-inline" style="width: 400px">
+                            <input type="text" id="Hat"  >
+                        </div>
+                </div>
+                <div class="layui-form-item">
+                        <label for="Gender" class="layui-form-label">
+                            <span class="x-red">*</span>口罩</label>
+                        <div class="layui-input-inline" style="width: 400px">
+                            <input type="text" id="Mask"  >
+                        </div>
+                </div>
+                <div class="layui-form-item">
+                        <label for="Gender" class="layui-form-label">
+                            <span class="x-red">*</span>发型</label>
+                        <div class="layui-input-inline" style="width: 400px">
+                            <input type="text" id="Hair"  >
+                        </div>
+                </div>
+                <div class="layui-form-item">
+                        <label for="Gender" class="layui-form-label">
+                            <span class="x-red">*</span>眼状态</label>
+                        <div class="layui-input-inline" style="width: 400px">
+                            <input type="text" id="EyeOpen"  >
+                        </div>
+                </div>
+          </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center">
+              <button class="layui-btn" id="check" >智能判断</button>
+        </div>
+    </div>
+</div>
+
+<script>
+layui.use('layer', function(){
+
+    var $ = layui.$ //由于layer弹层依赖jQuery，所以可以直接得到
+    ,layer = layui.layer;
+
+    $("#check").click(function () {
+
+        $.ajax({
+                url: "/faceide",
+                type: "POST",
+                data: {"imgurl": $("#imgurl").val()},
+                dataType: "json",
+                async: true,
+                success: function (data) {
+
+                    var gender=data.Gender;
+                    var age=data.Age;
+                    var smile=data.smile;
+                    var glass=data.Glass;
+                    var beauty=data.Beauty;
+                    var hat=data.Hat;
+                    var mask=data.Mask;
+                    var hair=data.Hair;
+                    var eyeopen=data.EyeOpen;
+
+                    $("#Gender").val(gender);
+                    $("#Age").val(age);
+                    $("#smile").val(smile);
+                    $("#Glass").val(glass);
+                    $("#Beauty").val(beauty);
+                    $("#Hat").val(hat);
+                    $("#Mask").val(mask);
+                    $("#Hair").val(hair);
+                    $("#EyeOpen").val(eyeopen);
+
+
+                },
+                error: function (e) {
+                    alert("出现错误！！");
+                }
+            });
+
+
+    })
+
+});
+
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+
+
+    //拖拽上传
+    upload.render({
+        elem: '#test10'
+        , url: '/facephotoupload' //改成您自己的上传接口
+        ,size:3072
+        , done: function (res) {
+            // layer.msg(res.data.src);
+            $("#imgurl").val(res.data.src);
+            layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.data.src);
+            console.log(res)
+        }
+    });
+
+
+});
+
+
+
+</script>
+</body>
+</html>
